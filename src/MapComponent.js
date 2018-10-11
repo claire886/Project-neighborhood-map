@@ -1,8 +1,8 @@
+/* global google */
 import React from 'react'
 
 class MapComponent extends React.Component {
   getGoogleMaps() {
-    /* global google */
     //Define the promise if there is it is not existed
     if (!this.googleMapsPromise) {
       this.googleMapsPromise = new Promise((resolve) => {
@@ -49,8 +49,8 @@ class MapComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <div id="map" style={{width: 400, height: 300}}></div>
+      <div id='mapContent' >
+        <div id="map" style={{lex: 1}}></div>
       </div>
     )
   }

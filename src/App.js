@@ -23,7 +23,7 @@ class App extends Component {
         </div>
         <div className='mapContainer'>
           <HamburgerMenu />
-          <MapComponent />
+          <MapComponent places={ places } />
         </div>
       </div>
     );
