@@ -1,7 +1,13 @@
 /* global google */
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class MapComponent extends React.Component {
+
+  static propTypes = {
+    places: PropTypes.array.isRequired
+  }
+
   getGoogleMaps() {
     //Define the promise if there is it is not existed
     if (!this.googleMapsPromise) {
@@ -40,10 +46,15 @@ class MapComponent extends React.Component {
         zoom: 13,
         center: portland
       });
-      const marker = new google.maps.Marker({
-        position: portland,
-        map: map
-      });
+
+      let markers = []
+      this.props.places.forEach(place => {
+        const marker = new google.maps.Marker({
+        position: {lat: place.lat, lng: place.lng},
+        map: map,
+        });
+        markers.push(place.place)
+      })
     });
   }
 
