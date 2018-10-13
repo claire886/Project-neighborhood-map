@@ -6,21 +6,6 @@ import FilterBar from './FilterBar';
 import PlacesList from './PlacesList';
 
 class App extends Component {
-  // Getting venues around International Rose Test Garden by Foursquare API
-  // Filtering out data without address
-  getVenues = () => {
-    const foursquareApi = 'https://api.foursquare.com/v2/venues/search?ll=45.52,-122.71&client_id=KNHSATCIRLFKV1XG5AABYEOCD203O3PCQHN5TMOTPE4EPWOO&client_secret=VK3WAOLFWLVRSKVEXOYCM4XAGVVLXTHOPZM3YVFXNA3EQNOT&v=20181012'
-
-    fetch(foursquareApi)
-    .then(resp => resp.json())
-    .then(data => data.response.venues.filter(venue => venue.location.address))
-    .then(d => console.log(d))
-    .catch(err => console.log(err))
-  }
-
-  componentWillMount() {
-    this.getVenues()
-  }
 
   render() {
     const places = [
@@ -39,7 +24,7 @@ class App extends Component {
         </div>
         <div className='mapContainer'>
           <HamburgerMenu />
-          <MapComponent places={ places } />
+          <MapComponent />
         </div>
       </div>
     );
