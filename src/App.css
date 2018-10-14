@@ -61,6 +61,10 @@
   height: 100%;
 }
 
+.infowindow {
+  text-align: left;
+  padding-left: 0;
+}
 
 .hamburger-menu {
     width: 35px;

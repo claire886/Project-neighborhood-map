@@ -6,7 +6,7 @@ class MapComponent extends React.Component {
   static propTypes = {
     venues: PropTypes.array.isRequired
   }
-
+  // This function will get google map through API
   getGoogleMaps() {
     //Define the promise if there is it is not existed
     if (!this.googleMapsPromise) {
@@ -40,21 +40,30 @@ class MapComponent extends React.Component {
   componentDidMount() {
     // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
-      const portland = {lat: 45.52, lng: -122.70};
+      const portland = {lat: 45.554, lng: -122.836};
       const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
+        zoom: 18,
         center: portland
       });
 
-      let markers = []
+      let markers = [];
       // Adding markers on map according to data fetched from Foursquare
-        this.props.venues.forEach(venue => {
-          const marker = new google.maps.Marker({
-          position: {lat: venue.location.lat, lng: venue.location.lng},
-          map: map,
-          });
-          markers.push(venue)        
-        })
+      this.props.venues.forEach(venue => {
+        const marker = new google.maps.Marker({
+        position: {lat: venue.location.lat, lng: venue.location.lng},
+        map: map,
+        });
+        markers.push(marker);
+
+        let infoWindow =  new google.maps.InfoWindow({
+          content: `<div style='text-align:left;'><p style='margin:0; padding-right: 5px'>Address: ${venue.location.address}</p>
+                          <p style='margin:0;'>Category: ${venue.categories[0].name}</p></div>`
+         })
+        marker.addListener('click', () => {
+          infoWindow.marker = marker
+          infoWindow.open(map, marker)
+        })                     
+      })
 console.log('markers', markers)
     });
   }

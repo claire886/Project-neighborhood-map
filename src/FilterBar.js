@@ -4,7 +4,8 @@ class FilterBar extends React.Component {
 	render() {
 		return (
 			<div className='filter'>
-				<h3>Northwest Portland</h3>
+				<h3>Bethany Neighborhood</h3>
+				<p>Portland, Oregon</p>
 				<form>
 					<input
 						type='text'

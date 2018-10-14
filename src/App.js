@@ -12,11 +12,11 @@ class App extends Component {
   // Getting venues around International Rose Test Garden by Foursquare API
   // Filtering out data without address
   getVenues = () => {
-    const foursquareApi = 'https://api.foursquare.com/v2/venues/search?ll=45.52,-122.71&client_id=KNHSATCIRLFKV1XG5AABYEOCD203O3PCQHN5TMOTPE4EPWOO&client_secret=VK3WAOLFWLVRSKVEXOYCM4XAGVVLXTHOPZM3YVFXNA3EQNOT&v=20181012'
+    const foursquareApi = 'https://api.foursquare.com/v2/venues/search?ll=45.554,-122.836&client_id=KNHSATCIRLFKV1XG5AABYEOCD203O3PCQHN5TMOTPE4EPWOO&client_secret=VK3WAOLFWLVRSKVEXOYCM4XAGVVLXTHOPZM3YVFXNA3EQNOT&v=20181012'
     return(
       fetch(foursquareApi)
       .then(resp => resp.json())
-      .then(data => data.response.venues.filter(venue => venue.location.address))
+      .then(data => data.response.venues.filter(venue => (venue.location.address && venue.categories.length>0)))
       .catch(err => console.log(err))
     )
   }
