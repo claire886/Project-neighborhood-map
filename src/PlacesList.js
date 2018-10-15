@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 class PlacesList extends React.Component {
 	static propTypes = {
-		venues: PropTypes.array.isRequired 
+		venues: PropTypes.array.isRequired,
+		onCurrentVenue: PropTypes.func.isRequired
 	}
 
 	state = {
@@ -18,6 +19,7 @@ class PlacesList extends React.Component {
 			}
 			target.style.background='red'
 			this.setState({ clickedVenue: target} )
+			this.props.onCurrentVenue(target)
 		}
 	}
 

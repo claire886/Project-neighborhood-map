@@ -7,7 +7,8 @@ import PlacesList from './PlacesList';
 
 class App extends Component {
   state = {
-    venues: []
+    venues: [],
+    currentVenue: null
   }
   // Getting venues around International Rose Test Garden by Foursquare API
   // Filtering out data without address
@@ -21,6 +22,11 @@ class App extends Component {
     )
   }
 
+  currentVenue(venue) {
+    this.setState({currentVenue: venue})
+console.log('venue, this.state.currentVenue',venue, this.state.currentVenue)
+  }
+
   componentWillMount() {
     this.getVenues()
     .then(result => {
@@ -30,11 +36,12 @@ class App extends Component {
 
   render() {
 console.log('venues', this.state.venues)
+console.log('this, this.state.currentVenue', this, this.state.currentVenue)
     return (
       <div className="App">
         <div className='sideBar'>
           <FilterBar />
-          <PlacesList venues={ this.state.venues } />
+          <PlacesList venues={ this.state.venues } onCurrentVenue={ this.currentVenue.bind(this) } />
         </div>
         <div className='mapContainer'>
           <HamburgerMenu />
