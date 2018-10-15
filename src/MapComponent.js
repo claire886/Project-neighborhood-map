@@ -47,6 +47,7 @@ class MapComponent extends React.Component {
       });
 
       let markers = [];
+      let infoWindow =  new google.maps.InfoWindow
       // Adding markers on map according to data fetched from Foursquare
       this.props.venues.forEach(venue => {
         const marker = new google.maps.Marker({
@@ -54,14 +55,19 @@ class MapComponent extends React.Component {
         map: map,
         });
         markers.push(marker);
-
-        let infoWindow =  new google.maps.InfoWindow({
-          content: `<div style='text-align:left;'><p style='margin:0; padding-right: 5px'>Address: ${venue.location.address}</p>
-                          <p style='margin:0;'>Category: ${venue.categories[0].name}</p></div>`
-         })
+        // When a marker is clicked, its infowindow will be open.
+        // Only one infowindow would be displayed on map.
         marker.addListener('click', () => {
-          infoWindow.marker = marker
-          infoWindow.open(map, marker)
+          if (infoWindow.marker !== marker) {
+            infoWindow.marker = marker
+            infoWindow.setContent(`<div style='text-align:left;'><p style='margin:0; padding-right: 5px'>Address: ${venue.location.address}</p>
+                          <p style='margin:0;'>Category: ${venue.categories[0].name}</p></div>`)
+            infoWindow.open(map, marker)
+            // When the infowindow is closed by clicked, infowindow.marker is set to be null.
+            // Then if the same marker is clicked consectively, it can be displayed agian.
+            infoWindow.addListener('closeclick', () => {infoWindow.marker = null})
+          }
+console.log('infoWindow', infoWindow, infoWindow.marker)
         })                     
       })
 console.log('markers', markers)
