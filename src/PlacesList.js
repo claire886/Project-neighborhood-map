@@ -8,18 +8,18 @@ class PlacesList extends React.Component {
 	}
 
 	state = {
-		clickedVenue: null
+		clickedVenue: ''
 	}
 	// When a venue is clicked on list view, its background color will change.
 	// The clicked venue on the map will display infowindow too.
 	clickVenueList(target) {
 		if (target !== this.state.clickedVenue) {
-			if (this.state.clickedVenue !== null) {
-				this.state.clickedVenue.style.background='white'
+			if (this.state.clickedVenue) {
+			//	this.state.clickedVenue.style.background='white'
 			}
 			target.style.background='red'
 			this.setState({ clickedVenue: target} )
-			this.props.onCurrentVenue(target)
+			this.props.onCurrentVenue(target.innerHTML)
 		}
 	}
 

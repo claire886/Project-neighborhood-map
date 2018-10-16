@@ -7,10 +7,12 @@ import PlacesList from './PlacesList';
 
 class App extends Component {
   state = {
+    // Locations will be showed on map and list
     venues: [],
-    currentVenue: null
+    // The location is clicked
+    currentVenue: ''
   }
-  // Getting venues around International Rose Test Garden by Foursquare API
+  // Getting venues around Bethany plazza through Foursquare API
   // Filtering out data without address
   getVenues = () => {
     const foursquareApi = 'https://api.foursquare.com/v2/venues/search?ll=45.554,-122.836&client_id=KNHSATCIRLFKV1XG5AABYEOCD203O3PCQHN5TMOTPE4EPWOO&client_secret=VK3WAOLFWLVRSKVEXOYCM4XAGVVLXTHOPZM3YVFXNA3EQNOT&v=20181012'
@@ -21,10 +23,9 @@ class App extends Component {
       .catch(err => console.log(err))
     )
   }
-
+  // Got the clicked venue name when a venue on list is clicked 
   currentVenue(venue) {
     this.setState({currentVenue: venue})
-console.log('venue, this.state.currentVenue',venue, this.state.currentVenue)
   }
 
   componentWillMount() {
@@ -35,8 +36,6 @@ console.log('venue, this.state.currentVenue',venue, this.state.currentVenue)
   }
 
   render() {
-console.log('venues', this.state.venues)
-console.log('this, this.state.currentVenue', this, this.state.currentVenue)
     return (
       <div className="App">
         <div className='sideBar'>
@@ -45,7 +44,7 @@ console.log('this, this.state.currentVenue', this, this.state.currentVenue)
         </div>
         <div className='mapContainer'>
           <HamburgerMenu />
-          <MapComponent venues={ this.state.venues } />
+          <MapComponent venues={ this.state.venues } currentVenue={ this.state.currentVenue } />
         </div>
       </div>
     );

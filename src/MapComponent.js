@@ -1,11 +1,13 @@
-/* global google */
+/* global google */  // I don't understand this is. After googling, I added this line and the bug disappeared. 
 import React from 'react'
 import PropTypes from 'prop-types'
 
 class MapComponent extends React.Component {
   static propTypes = {
-    venues: PropTypes.array.isRequired
+    venues: PropTypes.array.isRequired,
+    currentVenue: PropTypes.string.isRequired
   }
+
   // This function will get google map through API
   getGoogleMaps() {
     //Define the promise if there is it is not existed
@@ -31,7 +33,15 @@ class MapComponent extends React.Component {
     // Return a promise for the Google Maps API
     return this.googleMapsPromise;
   }
- 
+  // When a venue on list is clicked, the matching marker on map would open the infowindow. 
+  openInfowindow() {
+    const currentMarker = this.markers.filter(marker => marker.title === this.props.currentVenue)
+    const mkrIdx = this.markers.indexOf(currentMarker[0])
+    window.google.maps.event.trigger(this.markers[mkrIdx], "click")
+
+console.log('current venue & Marker', this.props.currentVenue, currentMarker, mkrIdx)
+  }
+
   componentWillMount() {
     // Start Google Maps API loading
     this.getGoogleMaps();
@@ -40,41 +50,52 @@ class MapComponent extends React.Component {
   componentDidMount() {
     // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
-      const portland = {lat: 45.554, lng: -122.836};
-      const map = new google.maps.Map(document.getElementById('map'), {
+      const bethany = {lat: 45.554, lng: -122.836};
+      const map = new window.google.maps.Map(document.getElementById('map'), {
         zoom: 18,
-        center: portland
+        center: bethany
       });
 
-      let markers = [];
-      let infoWindow =  new google.maps.InfoWindow
+      let markers = []
+      this.markers = markers
+      let infoWindow =  new google.maps.InfoWindow()
       // Adding markers on map according to data fetched from Foursquare
       this.props.venues.forEach(venue => {
         const marker = new google.maps.Marker({
         position: {lat: venue.location.lat, lng: venue.location.lng},
         map: map,
+        id: venue.id,
+        animation: window.google.maps.Animation.DROP,
+        title: venue.name
         });
-        markers.push(marker);
+        this.markers.push(marker);
         // When a marker is clicked, its infowindow will be open.
         // Only one infowindow would be displayed on map.
         marker.addListener('click', () => {
           if (infoWindow.marker !== marker) {
             infoWindow.marker = marker
-            infoWindow.setContent(`<div style='text-align:left;'><p style='margin:0; padding-right: 5px'>Address: ${venue.location.address}</p>
+            infoWindow.setContent(`<div style='text-align:left;'>
+                          <p stypel='padding-right: 5px;'>${venue.name}</p>
+                          <p style='margin:0;'>Address: ${venue.location.address}</p>
                           <p style='margin:0;'>Category: ${venue.categories[0].name}</p></div>`)
+            marker.setAnimation(window.google.maps.Animation.BOUNCE)
+            window.setTimeout(() => {marker.setAnimation(null);}, 500);
             infoWindow.open(map, marker)
             // When the infowindow is closed by clicked, infowindow.marker is set to be null.
             // Then if the same marker is clicked consectively, it can be displayed agian.
             infoWindow.addListener('closeclick', () => {infoWindow.marker = null})
           }
-console.log('infoWindow', infoWindow, infoWindow.marker)
-        })                     
+        })
       })
-console.log('markers', markers)
+console.log('markers', this.markers)
     });
   }
 
   render() {
+    if (this.props.currentVenue) {
+console.log('..........')      
+      this.openInfowindow()
+    }
     return (
       <div id='mapContent' >
         <div id="map" style={{lex: 1}}></div>
