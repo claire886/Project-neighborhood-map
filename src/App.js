@@ -7,7 +7,7 @@ import PlacesList from './PlacesList';
 
 class App extends Component {
   state = {
-    venues: [],
+    allVenues: [],
     searchTerm: '',
     filteredVenues: [],
     clickedVenue: ''
@@ -38,7 +38,7 @@ console.log('target & clickedVenue', target, this.state.clickedVenue )
 
   // Filter locations
   filterLocations(query) {
-    const result = this.state.venues.filter(venue => (
+    const result = this.state.allVenues.filter(venue => (
                                     venue.name.toLowerCase().includes(query) || venue.categories[0].name.toLowerCase().includes(query)))
     this.setState({ searchTerm: query,
                     filteredVenues: result})
@@ -48,20 +48,22 @@ console.log('filer result.......', result)
   componentWillMount() {
     this.getVenues()
     .then(result => {
-      this.setState({ venues: result})
+      this.setState({ allVenues: result})
     })
   }
 
   render() {
+    let venues = this.state.searchTerm ? this.state.filteredVenues : this.state.allVenues
+console.log('venues setting', this.state.query, venues)
     return (
       <div className="App">
         <div className='sideBar'>
           <FilterBar onFilterLocations = { this.filterLocations.bind(this) } />
-          <PlacesList venues={ this.state.venues } onClickVenueList={ this.clickVenueList.bind(this) } />
+          <PlacesList venues={ venues } onClickVenueList={ this.clickVenueList.bind(this) } />
         </div>
         <div className='mapContainer'>
           <HamburgerMenu />
-          <MapComponent venues={ this.state.venues } clickedVenue={ this.state.clickedVenue } />
+          <MapComponent venues={ venues } allVenues={ this.state.allVenues } clickedVenue={ this.state.clickedVenue } />
         </div>
       </div>
     );

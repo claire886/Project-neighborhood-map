@@ -1,4 +1,4 @@
-/* global google */  // I don't understand this is. After googling, I added this line and the bug disappeared. 
+/* global google */ 
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -48,22 +48,21 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
   componentDidMount() {
     // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
-      const beaverton = {lat: 45.488, lng: -122.801};
+      const beaverton = {lat: 45.49, lng: -122.81};
       const map = new window.google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
+        zoom: 14,
         center: beaverton
       });
 
       let markers = []
       this.markers = markers
-      let infoWindow =  new google.maps.InfoWindow()
+      let infoWindow =  new window.google.maps.InfoWindow()
       // Adding markers on map according to data fetched from Foursquare
       this.props.venues.forEach(venue => {
-        const marker = new google.maps.Marker({
+        const marker = new window.google.maps.Marker({
         position: {lat: venue.location.lat, lng: venue.location.lng},
         map: map,
         id: venue.id,
-        animation: window.google.maps.Animation.DROP,
         title: venue.name
         });
         this.markers.push(marker);
@@ -84,11 +83,25 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
           }
         })
       })
-console.log('markers', this.markers)
+      console.log('...........this.markers', this.markers)
     });
   }
 
   render() {
+    // Setting markers showed or hidden according the searched result
+    if(this.markers) {
+      if (this.props.venues.length !== this.markers.length) {
+        this.markers.forEach((marker, index) => {
+          if (this.props.venues.every(venue => venue.id !== marker.id)) {
+            this.markers[index].setVisible(false)
+          } else {
+            this.markers[index].setVisible(true)
+          }
+        })
+      } else {
+        this.markers.forEach(marker => marker.setVisible(true))
+      }
+    }
     // If a venue click happens, the infowindow will open.
     if (this.props.clickedVenue) {
       this.openInfowindow()
