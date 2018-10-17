@@ -7,15 +7,15 @@ import PlacesList from './PlacesList';
 
 class App extends Component {
   state = {
-    // Locations will be showed on map and list
     venues: [],
-    // The location is clicked
-    currentVenue: ''
+    searchTerm: '',
+    filteredVenues: [],
+    clickedVenue: ''
   }
-  // Getting venues around Bethany plazza through Foursquare API
+  // Getting venues around Beaverton town center, Oregon through Foursquare API
   // Filtering out data without address
   getVenues = () => {
-    const foursquareApi = 'https://api.foursquare.com/v2/venues/search?ll=45.554,-122.836&client_id=KNHSATCIRLFKV1XG5AABYEOCD203O3PCQHN5TMOTPE4EPWOO&client_secret=VK3WAOLFWLVRSKVEXOYCM4XAGVVLXTHOPZM3YVFXNA3EQNOT&v=20181012'
+    const foursquareApi = 'https://api.foursquare.com/v2/venues/search?ll=45.488,-122.801&client_id=KNHSATCIRLFKV1XG5AABYEOCD203O3PCQHN5TMOTPE4EPWOO&client_secret=VK3WAOLFWLVRSKVEXOYCM4XAGVVLXTHOPZM3YVFXNA3EQNOT&v=20181012'
     return(
       fetch(foursquareApi)
       .then(resp => resp.json())
@@ -23,9 +23,26 @@ class App extends Component {
       .catch(err => console.log(err))
     )
   }
-  // Got the clicked venue name when a venue on list is clicked 
-  currentVenue(venue) {
-    this.setState({currentVenue: venue})
+
+  // When a venue is clicked on list, its background color will change.
+  clickVenueList(target) {
+console.log('target & clickedVenue', target, this.state.clickedVenue )    
+    if (target !== this.state.clickedVenue) {
+      if (this.state.clickedVenue) {
+      //  this.state.clickedVenue.style.background='white'
+      }
+      target.style.background='red'
+      this.setState({ clickedVenue: target.innerHTML } )
+    }
+  }
+
+  // Filter locations
+  filterLocations(query) {
+    const result = this.state.venues.filter(venue => (
+                                    venue.name.toLowerCase().includes(query) || venue.categories[0].name.toLowerCase().includes(query)))
+    this.setState({ searchTerm: query,
+                    filteredVenues: result})
+console.log('filer result.......', result)
   }
 
   componentWillMount() {
@@ -39,12 +56,12 @@ class App extends Component {
     return (
       <div className="App">
         <div className='sideBar'>
-          <FilterBar />
-          <PlacesList venues={ this.state.venues } onCurrentVenue={ this.currentVenue.bind(this) } />
+          <FilterBar onFilterLocations = { this.filterLocations.bind(this) } />
+          <PlacesList venues={ this.state.venues } onClickVenueList={ this.clickVenueList.bind(this) } />
         </div>
         <div className='mapContainer'>
           <HamburgerMenu />
-          <MapComponent venues={ this.state.venues } currentVenue={ this.state.currentVenue } />
+          <MapComponent venues={ this.state.venues } clickedVenue={ this.state.clickedVenue } />
         </div>
       </div>
     );

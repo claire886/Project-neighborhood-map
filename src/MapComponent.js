@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 class MapComponent extends React.Component {
   static propTypes = {
     venues: PropTypes.array.isRequired,
-    currentVenue: PropTypes.string.isRequired
+    clickedVenue: PropTypes.string.isRequired
   }
 
   // This function will get google map through API
@@ -14,14 +14,12 @@ class MapComponent extends React.Component {
     if (!this.googleMapsPromise) {
       this.googleMapsPromise = new Promise((resolve) => {
         // Add a global handler for when the API finishes loading
-        // I don't understand below(it is from overstack)
         window.resolveGoogleMapsPromise = () => {
           // Resolve the promise
           resolve(google);
           // Tidy up
           delete window.resolveGoogleMapsPromise;
         };
-
         // Load the Google Maps API
         const script = document.createElement("script");
         const API = 'AIzaSyAwBnLKlsjBN7U-nxl6rF9NUCv1Mkf04Ow';
@@ -35,11 +33,11 @@ class MapComponent extends React.Component {
   }
   // When a venue on list is clicked, the matching marker on map would open the infowindow. 
   openInfowindow() {
-    const currentMarker = this.markers.filter(marker => marker.title === this.props.currentVenue)
+    const currentMarker = this.markers.filter(marker => marker.title === this.props.clickedVenue)
     const mkrIdx = this.markers.indexOf(currentMarker[0])
     window.google.maps.event.trigger(this.markers[mkrIdx], "click")
 
-console.log('current venue & Marker', this.props.currentVenue, currentMarker, mkrIdx)
+console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mkrIdx)
   }
 
   componentWillMount() {
@@ -50,10 +48,10 @@ console.log('current venue & Marker', this.props.currentVenue, currentMarker, mk
   componentDidMount() {
     // Once the Google Maps API has finished loading, initialize the map
     this.getGoogleMaps().then((google) => {
-      const bethany = {lat: 45.554, lng: -122.836};
+      const beaverton = {lat: 45.488, lng: -122.801};
       const map = new window.google.maps.Map(document.getElementById('map'), {
-        zoom: 18,
-        center: bethany
+        zoom: 15,
+        center: beaverton
       });
 
       let markers = []
@@ -69,8 +67,7 @@ console.log('current venue & Marker', this.props.currentVenue, currentMarker, mk
         title: venue.name
         });
         this.markers.push(marker);
-        // When a marker is clicked, its infowindow will be open.
-        // Only one infowindow would be displayed on map.
+        // When a marker is clicked, a infowindow will be open.
         marker.addListener('click', () => {
           if (infoWindow.marker !== marker) {
             infoWindow.marker = marker
@@ -92,8 +89,8 @@ console.log('markers', this.markers)
   }
 
   render() {
-    if (this.props.currentVenue) {
-console.log('..........')      
+    // If a venue click happens, the infowindow will open.
+    if (this.props.clickedVenue) {
       this.openInfowindow()
     }
     return (
