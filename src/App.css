@@ -9,6 +9,8 @@
 }
 
 body {
+  width: 100%;
+  height: 100%;
   max-width: 1400px;
 }
 
@@ -18,7 +20,7 @@ body {
   flex-wrap: wrap;
 }
 
-/*** header ***/
+/*** ---------------- header --------------- ***/
 header {
   width: 100%;
   display: flex;
@@ -41,20 +43,22 @@ header h2 {
   width: calc(100% - 60px)
 }
 
-/*** side bar ***/
+/*** --------------- side bar -------------- ***/
 .sideBar {
   position: absolute;
   left: 0;
   top: 75px;
   z-index: 100;
   width: 300px;
-  height: calc(100% - 75px);
+  height: 100%;
+  max-height: calc(100% - 75px);
   background-color: #BF7F3F;
+  overflow-y: auto;
 }
 
 #filter input{
   width: 70%;
-  margin: 15px;
+  margin: 15px 15px 3px 15px;
   height: 1.8em;
   font-size: 12px;
   border: 1px solid #b36b00;
@@ -84,7 +88,16 @@ li:nth-child(even) {
   background-color: #C87F3F;
 }
 
-/*** map ***/
+#foursquare p {
+  height: 20px;
+  font-size: 10px;
+  margin-top: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  text-align: right;
+}
+
+
+/*** ---------- map ------------- ***/
 .mapContainer {
   position: absolute;
   left: 5px;
@@ -93,11 +106,12 @@ li:nth-child(even) {
   width: 100%;
   height: 100%;
   max-width: 1400px;
+  max-height: calc(100% - 75px);
 }
 
 #mapContent {
   width: 100%;
-  height: calc(100% - 75px);
+  height: 100%;
   margin-bottom: 10px;
 }
 
@@ -111,10 +125,40 @@ li:nth-child(even) {
   padding-left: 0;
 }
 
-#foursquare {
-  position: absolute;
-  left: 5px;
-  bottom: 3px;
-  height: 20px;
-  font-size: 10px;
+/** --------------- @media setting ---------------- **/
+@media screen and (max-width: 442px) {
+  header h2 {
+    font-size: 18px;
+  }
+  #hamburger-menu {
+    margin: 10px;
+  }
+  .sideBar {
+    top: 55px;
+    width: 260px;
+    max-height: calc(100% - 49px);
+  }
+  .mapContainer {
+    top: 55px;
+    max-height: calc(100% - 49px);
+  }
+  #filter input {
+    margin-top: 10px;
+  }
+  .placesList ul {
+    padding-left: 10px;
+  }
+  .placesList li {
+    font-size: 0.9em;
+    padding: 3px;
+  }
 }
+
+@media screen and (min-width: 443px) and (max-width: 600px) {
+}
+
+@media screen and (min-width: 600px) {
+}  
+
+@media screen and (min-width: 768px) {
+} 

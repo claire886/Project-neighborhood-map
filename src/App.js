@@ -23,7 +23,6 @@ class App extends Component {
       .catch(err => console.log(err))
     )
   }
-
   // When a venue is clicked on list, its background color will change.
   clickVenueList(target) {
     const preTarget = document.querySelector('.clicked')
@@ -35,14 +34,12 @@ class App extends Component {
       this.setState({ clickedVenue: target.innerHTML } )
     }
   }
-
   // Filter locations
   filterLocations(query) {
     const result = this.state.allVenues.filter(venue => (
                                     venue.name.toLowerCase().includes(query) || venue.categories[0].name.toLowerCase().includes(query)))
     this.setState({ searchTerm: query,
                     filteredVenues: result})
-console.log('filer result.......', result)
   }
 
   componentWillMount() {
@@ -54,14 +51,13 @@ console.log('filer result.......', result)
 
   render() {
     let venues = this.state.searchTerm ? this.state.filteredVenues : this.state.allVenues
-console.log('venues setting', this.state.query, venues)
     return (
       <div className="App">
         <header>
-          <div><HamburgerMenu /></div>
-          <h2>Beaverton Town Center, Oregon</h2>
+          <HamburgerMenu />
+          <h2 tabIndex='0'>Beaverton Town Center, Oregon</h2>
         </header>
-        <div className='sideBar'>
+        <div className='sideBar' aria-label='side bar'>
           <FilterBar onFilterLocations = { this.filterLocations.bind(this) } />
           <PlacesList venues={ venues } onClickVenueList={ this.clickVenueList.bind(this) } />
         </div>

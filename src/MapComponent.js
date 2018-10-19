@@ -37,10 +37,8 @@ class MapComponent extends React.Component {
     const currentMarker = this.markers.filter(marker => marker.title === this.props.clickedVenue)
     const mkrIdx = this.markers.indexOf(currentMarker[0])
     window.google.maps.event.trigger(this.markers[mkrIdx], "click")
-
-console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mkrIdx)
   }
-
+  // Remove className of 'clicked' from clicked list
   clearClickedList() {
     if (document.querySelector('.clicked')) {
       document.querySelector('.clicked').classList.remove('clicked')
@@ -97,7 +95,6 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
           }
         })
       })
-      console.log('...........this.markers', this.markers)
     });
   }
 
@@ -120,16 +117,15 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
     if (this.props.clickedVenue) {
       this.openInfowindow()
     }
-    // Reset venue lists and infowindow when search bar is using.
+    // Reset venue lists and infowindow when search bar is in use.
     const activeElement = document.activeElement.tagName
-console.log('active......', activeElement)
     if (activeElement === 'INPUT') {
       this.infoWindow.close()
       this.clearClickedList()
     }
     return (
-      <div id='mapContent' >
-        <div id="map" style={{lex: 1}}></div>
+      <div id='mapContent' tabIndex='-1' >
+        <div id="map" tabIndex='-1' aria-label='Google Map' style={{lex: 1}} tabIndex='-1'></div>
       </div>
     )
   }

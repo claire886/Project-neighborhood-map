@@ -13,7 +13,7 @@ class FilterBar extends React.Component {
 
 	render() {
 		return (
-			<div id='filter'>
+			<div id='filter' aria-label='search locations'>
 				<input
 					id='query'
 					type='text'
