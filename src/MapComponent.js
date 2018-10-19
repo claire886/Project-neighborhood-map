@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 class MapComponent extends React.Component {
   static propTypes = {
     venues: PropTypes.array.isRequired,
-    clickedVenue: PropTypes.string.isRequired
+    clickedVenue: PropTypes.string.isRequired,
+    searchTerm: PropTypes.string
   }
 
   // This function will get google map through API
@@ -40,6 +41,12 @@ class MapComponent extends React.Component {
 console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mkrIdx)
   }
 
+  clearClickedList() {
+    if (document.querySelector('.clicked')) {
+      document.querySelector('.clicked').classList.remove('clicked')
+    }
+  }
+
   componentWillMount() {
     // Start Google Maps API loading
     this.getGoogleMaps();
@@ -57,6 +64,7 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
       let markers = []
       this.markers = markers
       let infoWindow =  new window.google.maps.InfoWindow()
+      this.infoWindow = infoWindow
       // Adding markers on map according to data fetched from Foursquare
       this.props.venues.forEach(venue => {
         const marker = new window.google.maps.Marker({
@@ -71,7 +79,7 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
           if (infoWindow.marker !== marker) {
             infoWindow.marker = marker
             infoWindow.setContent(`<div style='text-align:left;'>
-                          <p stypel='padding-right: 5px;'>${venue.name}</p>
+                          <p stypel='padding-right: 5px; margin: 6px 0;'>${venue.name}</p>
                           <p style='margin:0;'>Address: ${venue.location.address}</p>
                           <p style='margin:0;'>Category: ${venue.categories[0].name}</p></div>`)
             marker.setAnimation(window.google.maps.Animation.BOUNCE)
@@ -79,7 +87,13 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
             infoWindow.open(map, marker)
             // When the infowindow is closed by clicked, infowindow.marker is set to be null.
             // Then if the same marker is clicked consectively, it can be displayed agian.
-            infoWindow.addListener('closeclick', () => {infoWindow.marker = null})
+            infoWindow.addListener('closeclick', () => {infoWindow.marker = null
+                                                        this.clearClickedList()
+                                                        })
+            // If clicked marker is not clicked venue on list, reset list
+            if (document.querySelector('.clicked') && this.props.clickedVenue !== marker.title) {
+              document.querySelector('.clicked').classList.remove('clicked')
+            }
           }
         })
       })
@@ -105,6 +119,13 @@ console.log('current venue & Marker', this.props.clcikedVenue, currentMarker, mk
     // If a venue click happens, the infowindow will open.
     if (this.props.clickedVenue) {
       this.openInfowindow()
+    }
+    // Reset venue lists and infowindow when search bar is using.
+    const activeElement = document.activeElement.tagName
+console.log('active......', activeElement)
+    if (activeElement === 'INPUT') {
+      this.infoWindow.close()
+      this.clearClickedList()
     }
     return (
       <div id='mapContent' >

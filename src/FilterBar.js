@@ -13,9 +13,7 @@ class FilterBar extends React.Component {
 
 	render() {
 		return (
-			<div className='filter'>
-				<h3>Beaverton Town Center</h3>
-				<p>Beaverton, Oregon</p>
+			<div id='filter'>
 				<input
 					id='query'
 					type='text'

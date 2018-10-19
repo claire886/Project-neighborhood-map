@@ -26,12 +26,12 @@ class App extends Component {
 
   // When a venue is clicked on list, its background color will change.
   clickVenueList(target) {
-console.log('target & clickedVenue', target, this.state.clickedVenue )    
-    if (target !== this.state.clickedVenue) {
-      if (this.state.clickedVenue) {
-      //  this.state.clickedVenue.style.background='white'
-      }
-      target.style.background='red'
+    const preTarget = document.querySelector('.clicked')
+    if (preTarget) {
+      preTarget.classList.remove('clicked')
+    }
+    if (target !== preTarget) {
+      target.className='clicked'
       this.setState({ clickedVenue: target.innerHTML } )
     }
   }
@@ -57,14 +57,17 @@ console.log('filer result.......', result)
 console.log('venues setting', this.state.query, venues)
     return (
       <div className="App">
+        <header>
+          <div><HamburgerMenu /></div>
+          <h2>Beaverton Town Center, Oregon</h2>
+        </header>
         <div className='sideBar'>
           <FilterBar onFilterLocations = { this.filterLocations.bind(this) } />
           <PlacesList venues={ venues } onClickVenueList={ this.clickVenueList.bind(this) } />
         </div>
         <div className='mapContainer'>
-          <HamburgerMenu />
-          <MapComponent venues={ venues } allVenues={ this.state.allVenues } clickedVenue={ this.state.clickedVenue } />
-        </div>
+          <MapComponent venues={ venues } allVenues={ this.state.allVenues } searchTerm={ this.state.searchTerm } clickedVenue={ this.state.clickedVenue } />
+          </div>
       </div>
     );
   }

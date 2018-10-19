@@ -14,6 +14,10 @@ class PlacesList extends React.Component {
 					{this.props.venues.map(venue => <li key={ venue.id }>{ venue.name }</li>
 					)}
 				</ul>
+		        <div id='foursquare'>
+	    	     <p>Locations infomation are from Foursquare</p>
+    	    	 </div>
+
 			</div>
 		)
 
