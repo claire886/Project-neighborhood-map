@@ -53,9 +53,10 @@ class App extends Component {
     let venues = this.state.searchTerm ? this.state.filteredVenues : this.state.allVenues
     return (
       <div className="App">
+        <div id='modal'>Hello</div>
         <header>
           <HamburgerMenu />
-          <h2 tabIndex='0'>Beaverton Town Center, Oregon</h2>
+          <h2>Beaverton Town Center, Oregon</h2>
         </header>
         <div className='sideBar' aria-label='side bar'>
           <FilterBar onFilterLocations = { this.filterLocations.bind(this) } />

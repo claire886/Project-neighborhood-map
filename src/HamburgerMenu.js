@@ -1,6 +1,7 @@
 import React from 'react'
 
 const HamburgerMenu = () => {
+	// Users can click the hamburger menu to make side bar showed or disappeared
 	function sideBarToggle() {
 		const elSideBar = document.querySelector('.sideBar');
 		if (elSideBar.style.display === 'none') {
@@ -9,9 +10,8 @@ const HamburgerMenu = () => {
 			elSideBar.style.display = 'none';
 		}
 	}
-
+	// When hamburger menu is focused, users can press enter key on keyboard to make side bar showed or disappeared. 
 	function enterHamburgerMenu(e) {
-console.log('---press enter key---', e.charCode)		
 		if (e.charCode === 13) {
 			sideBarToggle()
 		}

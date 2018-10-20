@@ -5,10 +5,10 @@ class FilterBar extends React.Component {
 	static proptypes = {
 		onFilterLocations: PropTypes.func.isRequired
 	}
-
+	// Get query value and pass it to locations filtering function
 	getQuery() {
 		const elQuery = document.getElementById('query')
-		this.props.onFilterLocations(elQuery.value)
+		this.props.onFilterLocations(elQuery.value.toLowerCase())
 	}
 
 	render() {
